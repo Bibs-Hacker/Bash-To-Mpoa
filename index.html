@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merab Countdown 💖 by Twinnie Brian</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff0ff0">
+    
+    <style>
+        /* Shining Neon Romantic Theme */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            overflow: hidden;
+            color: #fff;
+            position: relative;
+            background: #0a001f;
+            transition: background 0.8s ease;
+        }
+
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Neon Glow Text */
+        .neon-text {
+            text-shadow: 
+                0 0 10px #ff0ff0,
+                0 0 20px #ff0ff0,
+                0 0 30px #ff0ff0,
+                0 0 40px #ff69b4,
+                0 0 70px #ff69b4,
+                0 0 80px #ff1493;
+        }
+
+        .neon-pink { color: #ff0ff0; }
+        .neon-purple { color: #c800ff; }
+        .neon-cyan { color: #00ffff; }
+
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a001f, #1a0033);
+            z-index: 100;
+            transition: opacity 1.2s ease;
+        }
+
+        .splash-icon {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 5px solid #ff0ff0;
+            box-shadow: 
+                0 0 30px #ff0ff0,
+                0 0 60px #ff69b4,
+                inset 0 0 20px #ff1493;
+            animation: neonPulse 2s infinite ease-in-out;
+        }
+
+        #splash-screen h1 {
+            margin-top: 30px;
+            font-size: 32px;
+            class="neon-text neon-pink"
+        }
+
+        #main-content {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .profiles-container {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .profile-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 25px;
+            background: rgba(20, 0, 40, 0.4);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(255, 15, 240, 0.5);
+            transition: transform 0.4s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-10px) scale(1.05);
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid #ff0ff0;
+            box-shadow: 
+                0 0 20px #ff0ff0,
+                0 0 40px #ff69b4,
+                0 0 60px #ff1493;
+        }
+
+        .profile-name {
+            font-size: 28px;
+            margin: 15px 0;
+            class="neon-text neon-pink"
+        }
+
+        .profile-dob {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #c800ff;
+            text-shadow: 0 0 15px #c800ff;
+        }
+
+        .countdown-title {
+            font-size: 32px;
+            margin: 30px 0;
+            class="neon-text neon-cyan"
+        }
+
+        #countdown {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 50px 0;
+            flex-wrap: wrap;
+        }
+
+        .time-unit {
+            background: rgba(10, 0, 30, 0.7);
+            padding: 25px 35px;
+            border-radius: 25px;
+            min-width: 140px;
+            backdrop-filter: blur(8px);
+            border: 2px solid #ff0ff0;
+            box-shadow: 
+                0 0 20px #ff0ff0,
+                0 0 40px rgba(255, 105, 180, 0.6);
+            transition: all 0.4s ease;
+        }
+
+        .time-unit:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 50px #ff0ff0;
+        }
+
+        .time-unit span {
+            display: block;
+            font-size: 64px;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 
+                0 0 15px #00ffff,
+                0 0 30px #00ffff;
+        }
+
+        .time-unit label {
+            font-size: 20px;
+            color: #ff69b4;
+            text-shadow: 0 0 10px #ff69b4;
+        }
+
+        /* Smooth Neon Buttons */
+        button {
+            padding: 16px 36px;
+            margin: 15px;
+            border: none;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(45deg, #ff0ff0, #ff69b4);
+            color: #000;
+            box-shadow: 
+                0 0 20px #ff0ff0,
+                0 0 40px #ff69b4;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 0 50px #ff0ff0;
+        }
+
+        #heart-button {
+            background: none;
+            font-size: 70px;
+            animation: heartbeat 1.5s infinite ease-in-out;
+            box-shadow: none;
+        }
+
+        #heart-button span {
+            font-size: 22px;
+            class="neon-text neon-pink"
+        }
+
+        footer {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+            class="neon-text neon-purple"
+        }
+
+        #message-overlay, #gifts-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 0, 30, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            z-index: 200;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        #typewriter, #gifts-content {
+            font-size: 21px;
+            line-height: 1.9;
+            max-width: 90%;
+            color: #fff;
+            white-space: pre-wrap;
+            padding: 30px;
+            background: rgba(20, 0, 50, 0.5);
+            border-radius: 20px;
+            border: 2px solid #ff0ff0;
+            box-shadow: 0 0 30px #ff0ff0;
+        }
+
+        #typewriter {
+            border-right: 4px solid #ff0ff0;
+            animation: blink 0.7s step-end infinite;
+        }
+
+        #gifts-content h2 {
+            class="neon-text neon-cyan"
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #gifts-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #gifts-content li {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 15, 240, 0.1);
+            border-radius: 15px;
+            border-left: 5px solid #ff0ff0;
+            text-shadow: 0 0 10px #ff69b4;
+        }
+
+        #milestone-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 0, 30, 0.9);
+            padding: 40px 60px;
+            border-radius: 30px;
+            text-align: center;
+            font-size: 36px;
+            class="neon-text neon-pink"
+            box-shadow: 0 0 60px #ff0ff0;
+            z-index: 300;
+            opacity: 0;
+            transition: all 1s ease;
+            pointer-events: none;
+            border: 3px solid #ff0ff0;
+        }
+
+        #milestone-notification.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { box-shadow: 0 0 20px #ff0ff0, 0 0 40px #ff69b4; }
+            50% { box-shadow: 0 0 50px #ff0ff0, 0 0 80px #ff1493; }
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.15); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.15); }
+            70% { transform: scale(1); }
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: #ff0ff0; }
+        }
+
+        /* Light Theme - Soft Romantic Glow */
+        .light-theme {
+            background: linear-gradient(135deg, #fff0ff, #ffe6ff);
+            color: #333;
+        }
+
+        .light-theme .neon-text {
+            text-shadow: 0 0 10px #ff69b4;
+            color: #ff1493;
+        }
+
+        .light-theme button {
+            background: linear-gradient(45deg, #ff69b4, #ff0ff0);
+            color: #000;
+        }
+
+        .light-theme .time-unit span {
+            color: #ff0ff0;
+            text-shadow: 0 0 10px #ff69b4;
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <img src="https://files.catbox.moe/74tj86.jpg" alt="Twinnie Brian" class="splash-icon">
+        <h1 class="neon-text neon-pink">Merab Countdown 💖 by Twinnie Brian</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        <div class="profiles-container">
+            <div class="profile-card">
+                <img src="https://files.catbox.moe/spvjqx.jpg" alt="Mercy Merab" class="profile-pic">
+                <div class="profile-name neon-text neon-pink">Mercy Merab 👑</div>
+                <div class="profile-dob">Date of Birth: 26 April 2007</div>
+            </div>
+            
+            <div class="profile-card">
+                <img src="https://files.catbox.moe/74tj86.jpg" alt="Twinnie Brian" class="profile-pic">
+                <div class="profile-name neon-text neon-pink">Twinnie Brian 💻</div>
+                <div class="profile-dob">Date of Birth: 24 January 2006 💖</div>
+            </div>
+        </div>
+        
+        <h1 class="countdown-title neon-text neon-cyan">Counting down to My Queen's Birthday 💝</h1>
+        
+        <div id="countdown">
+            <div class="time-unit">
+                <span id="days">00</span>
+                <label>Days</label>unit
+            </div>
+            <div class="time-unit">
+                <span id="hours">00</span>
+                <label>Hours</label>
+            </div>
+            <div class="time-unit">
+                <span id="minutes">00</span>
+                <label>Minutes</label>
+            </div>
+            <div class="time-unit">
+                <span id="seconds">00</span>
+                <label>Seconds</label>
+            </div>
+        </div>
+
+        <button id="heart-button" aria-label="Read My Heart">
+            ❤️
+            <span class="neon-text neon-pink">Read My Heart 💌</span>
+        </button>
+
+        <button id="gifts-button">Birthday Gift Ideas 🎁</button>
+        <button id="theme-toggle">🌙 Switch Theme</button>
+
+        <footer class="neon-text neon-purple">
+            With eternal love, from Twinnie Brian 💘 to Mercy Merab — Infinite loop of love 🫶
+        </footer>
+    </div>
+
+    <!-- Love Message -->
+    <div id="message-overlay">
+        <div id="typewriter"></div>
+        <button id="close-message">Close 💕</button>
+    </div>
+
+    <!-- Gift Ideas -->
+    <div id="gifts-overlay">
+        <div id="gifts-content">
+            <h2 class="neon-text neon-cyan">Birthday Gift Ideas for My Queen Mercy Merab 🎂💝</h2>
+            <ul>
+                <li>✨ A custom star named after you — because you're my entire galaxy</li>
+                <li>💎 Personalized diamond necklace with our initials engraved</li>
+                <li>🌹 A romantic weekend getaway to your dream destination</li>
+                <li>👗 Designer dress that makes you feel like the queen you are</li>
+                <li>🎨 A hand-painted portrait of us together by a real artist</li>
+                <li>💍 Promise ring upgrade — because forever starts now</li>
+                <li>🧸 Giant teddy bear with a recorded message from me</li>
+                <li>🌸 Subscription to unlimited flowers delivered monthly</li>
+                <li>❤️ A love letter book with 365 reasons why I love you</li>
+            </ul>
+            <p style="text-align:center; margin-top:30px; font-size:22px;">
+                But the greatest gift is my endless love for you, Merab 🫶
+            </p>
+        </div>
+        <button id="close-gifts">Close 🎀</button>
+    </div>
+
+    <!-- Milestone Notification -->
+    <div id="milestone-notification"></div>
+
+    <!-- Background -->
+    <canvas id="background-canvas"></canvas>
+
+    <script>
+        // Splash
+        window.onload = () => {
+            const splash = document.getElementById('splash-screen');
+            const main = document.getElementById('main-content');
+            setTimeout(() => {
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    main.style.display = 'flex';
+                }, 1200);
+            }, 2200);
+        };
+
+        // Countdown
+        let previousDays = -1;
+        const milestones = new Map([
+            [100, "💯 100 Days! My love grows stronger every day 💖"],
+            [50, "🥳 50 Days! Halfway to celebrating YOU, my Queen! 👑"],
+            [30, "🌟 30 Days! Can't wait to spoil you rotten 😍"],
+            [10, "🔥 10 Days! The countdown is getting real! 🎉"],
+            [7, "🌹 One Week Left! My heart beats only for you 💓"],
+            [1, "🌙 Tomorrow is YOUR DAY! Early Happy Birthday, love! 🎂"],
+            [0, "🎉🎈 HAPPY BIRTHDAY MERCY MERAB!!! 🎂💝 You're the light of my life! I love you infinitely! 🫶"]
+        ]);
+
+        function updateCountdown() {
+            const now = new Date();
+            let birthday = new Date(now.getFullYear(), 3, 26);
+            if (now > birthday) birthday.setFullYear(now.getFullYear() + 1);
+
+            const diff = birthday - now;
+            const days = Math.floor(diff / (1000*60*60*24));
+            const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+            const minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
+            const seconds = Math.floor((diff % (1000*60)) / 1000);
+
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+            if (days !== previousDays && milestones.has(days)) {
+                const notif = document.getElementById('milestone-notification');
+                notif.textContent = milestones.get(days);
+                notif.classList.add('show');
+                setTimeout(() => notif.classList.remove('show'), 7000);
+            }
+            previousDays = days;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Messages
+        const loveMessage = `My Dearest Mercy Merab 💖,
+
+Every beat of my heart whispers your name. From our first laugh to every late-night dream we've shared, you've turned my world into pure magic.
+
+Your beauty, your grace, your incredible soul — they inspire me every single day. Thank you for loving me, for believing in us, for being my safe place and my greatest adventure.
+
+As your birthday approaches, I count not just the days, but every blessing you've brought into my life. I promise you the moon, the stars, and all my love — forever.
+
+You are my Queen, my love, my everything.
+
+Eternally yours,
+Twinnie Brian 🫶💍`;
+
+        let charIndex = 0;
+        function typeWriter() {
+            if (charIndex < loveMessage.length) {
+                document.getElementById('typewriter').textContent += loveMessage.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 35);
+            }
+        }
+
+        document.getElementById('heart-button').addEventListener('click', () => {
+            document.getElementById('message-overlay').style.display = 'flex';
+            document.getElementById('typewriter').textContent = '';
+            charIndex = 0;
+            typeWriter();
+        });
+
+        document.getElementById('close-message').addEventListener('click', () => {
+            document.getElementById('message-overlay').style.display = 'none';
+        });
+
+        // Gift Ideas
+        document.getElementById('gifts-button').addEventListener('click', () => {
+            document.getElementById('gifts-overlay').style.display = 'flex';
+        });
+
+        document.getElementById('close-gifts').addEventListener('click', () => {
+            document.getElementById('gifts-overlay').style.display = 'none';
+        });
+
+        // Theme Toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            document.body.classList.toggle('dark-theme');
+            const btn = document.getElementById('theme-toggle');
+            btn.textContent = document.body.classList.contains('light-theme') ? 
+                '🌙 Dark Neon Mode' : '☀️ Light Romance Mode';
+        });
+
+        // Enhanced Particle Background
+        const canvas = document.getElementById('background-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const neonColors = ['#ff0ff0', '#ff69b4', '#c800ff', '#00ffff', '#ff1493', '#ff00ff'];
+
+        let particles = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 10 + 4;
+                this.speedY = -Math.random() * 3.5 - 1.2;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.color = neonColors[Math.floor(Math.random() * neonColors.length)];
+                this.opacity = 1;
+                this.twinkle = Math.random() > 0.5;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.opacity -= 0.007;
+                if (this.twinkle) this.size += Math.sin(Date.now() * 0.01) * 0.5;
+            }
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 0, 30, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if (Math.random() < 0.4) particles.push(new Particle());
+            particles.forEach((p, i) => {
+                p.update();
+                p.draw();
+                if (p.opacity <= 0 || p.y < -20) particles.splice(i, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
