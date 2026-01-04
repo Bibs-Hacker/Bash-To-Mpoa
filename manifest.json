@@ -1,0 +1,21 @@
+// manifest.json
+{
+    "name": "Merab Countdown 💖 by Twinnie Brian",
+    "short_name": "Merab Countdown",
+    "icons": [
+        {
+            "src": "https://files.catbox.moe/74tj86.jpg",
+            "sizes": "192x192",
+            "type": "image/jpg"
+        },
+        {
+            "src": "https://files.catbox.moe/74tj86.jpg",
+            "sizes": "512x512",
+            "type": "image/jpg"
+        }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#ff69b4",
+    "background_color": "#000000"
+}
